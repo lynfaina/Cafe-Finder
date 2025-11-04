@@ -1,5 +1,4 @@
-// ...existing code...
-const apiKey = "AIzaSyCDt84dCLwmaN32ljRX4ZH_sdCPEDaoxUg";
+const apiKey = "AIzaSyCDt84dCLwmaN32ljRX4ZH_sdCPEDaoxUg"; 
 
 const useProxy = true;
 const proxy = "https://cors-anywhere.herokuapp.com/"; // ensure trailing slash
@@ -45,6 +44,9 @@ function displayCards(cafes) {
     wrapper.className = 'swipe-wrapper';
     wrapper.style.zIndex = 200 - i;
 
+    var newCards = document.querySelectorAll('.location-card:not(.removed)');
+    var allCards = document.querySelectorAll('.location-card');
+
     const card = document.createElement("div");
     card.className = "location-card";
 
@@ -69,28 +71,23 @@ function displayCards(cafes) {
     wrapper.appendChild(card);
     container.appendChild(wrapper);
 
-    // Attach Hammer handlers per-wrapper so wrapper and cafeData are in scope
-    if (typeof Hammer !== 'undefined') {
-      const hammertime = new Hammer(wrapper);
-      hammertime.on("swipeleft", () => {
-        wrapper.style.transform = "translateX(-150%) rotate(-15deg)";
-        wrapper.style.opacity = 0;
-        setTimeout(() => wrapper.remove(), 100);
-      });
-      hammertime.on("swiperight", () => {
-        saveCafe(cafeData);
-        wrapper.style.transform = "translateX(150%) rotate(15deg)";
-        wrapper.style.opacity = 0;
-        setTimeout(() => wrapper.remove(), 100);
-      });
-    } else {
-      // fallback: click to save
-      card.addEventListener('click', () => saveCafe(cafeData));
-    }
+    const hammertime = new Hammer(wrapper);
+    hammertime.on("swipeleft", () => {
+      wrapper.style.transform = "translateX(-150%) rotate(-15deg)";
+      wrapper.style.opacity = 0;
+      setTimeout(() => wrapper.remove(), 100);
+    });
+    hammertime.on("swiperight", () => {
+      saveCafe(JSON.stringify(cafeData));
+      wrapper.style.transform = "translateX(150%) rotate(15deg)";
+      wrapper.style.opacity = 0;
+      setTimeout(() => wrapper.remove(), 100);
+    });
   });
 }
 
-function saveCafe(cafe) {
+function saveCafe(cafeJSON) {
+  const cafe = JSON.parse(cafeJSON);
   let saved = JSON.parse(localStorage.getItem('savedCafes') || '[]');
 
   if (!saved.find((c) => c.place_id === cafe.place_id)) {
@@ -122,4 +119,3 @@ function showSaved() {
     container.appendChild(card);
   });
 }
-// ...existing code...
