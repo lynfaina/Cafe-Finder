@@ -1,7 +1,7 @@
 const apiKey = "AIzaSyCDt84dCLwmaN32ljRX4ZH_sdCPEDaoxUg"; 
 
 const useProxy = true;
-const proxy = "https://cors-anywhere.herokuapp.com/"; // ensure trailing slash
+const proxy = "https://cors-anywhere.com/"; // ensure trailing slash
 
 function getLocation() {
   const cache = JSON.parse(localStorage.getItem('cachedLocation') || '{}');
